@@ -41,11 +41,11 @@ async function run() {
 
 
         // Backend Services Routes
-        // app.get('/toys', async (req, res) => {
-        //     const cursor = toysCollection.find()
-        //     const result = await cursor.toArray()
-        //     res.send(result)
-        // })
+        app.get('/toys', async (req, res) => {
+            const cursor = toysCollection.find()
+            const result = await cursor.toArray()
+            res.send(result)
+        })
 
         // Get all Added Data from mongodb
         app.get('/addtoys', async (req, res) => {
