@@ -41,11 +41,15 @@ async function run() {
 
 
         // Backend Services Routes
-        app.get('/toys', async (req, res) => {
-            const cursor = toysCollection.find()
-            const result = await cursor.toArray()
-            res.send(result)
+        app.get('/toys/:text', async (req, res) => {
+            if(req.params.text=="Avengers" || req.params.text=="Star wars" ||req.params.text=="transformers" ){
+                const result =await toysCollection.find({categoryName: req.params.text}).toArray()
+               return res.send(result)
+            }
         })
+
+
+
 
         // Get all Added Data from mongodb
         app.get('/addtoys', async (req, res) => {
