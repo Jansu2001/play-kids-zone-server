@@ -48,9 +48,6 @@ async function run() {
             }
         })
 
-
-
-
         // Get all Added Data from mongodb
         app.get('/addtoys', async (req, res) => {
             // console.log(req.query.email);
@@ -76,9 +73,6 @@ async function run() {
         app.get('/addtoys/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: new ObjectId(id) }
-            // const options = {
-            //     projection: { title: 1, price: 1, img: 1, date: 1 },
-            // };
             const result = await addToysCollection.findOne(query)
             res.send(result)
         })
@@ -103,9 +97,6 @@ async function run() {
         })
 
 
-
-
-
         // DELETE DATA
         app.delete('/addtoys/:id', async (req, res) => {
             const id = req.params.id;
@@ -113,25 +104,6 @@ async function run() {
             const result = await addToysCollection.deleteOne(query)
             res.send(result)
         })
-
-
-
-        // Get My toys by email
-        // app.get('/addtoys', async (req, res) => {
-        //     console.log(req.query.email);
-        //     let query = {}
-        //     if (req.query?.email) {
-        //         query = { email: req.query.email }
-        //     }
-        //     const result = await addToysCollection.find(query).toArray()
-        //     res.send(result)
-        // })
-
-
-
-
-
-
 
 
         // Send a ping to confirm a successful connection
