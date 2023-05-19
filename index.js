@@ -40,13 +40,33 @@ async function run() {
         const addToysCollection = client.db('playKidsZone').collection('addToys')
 
 
-        // Backend Services Routes
+        // Shop By Categories Tabs Backend Routes
         app.get('/toys/:text', async (req, res) => {
             if(req.params.text=="Avengers" || req.params.text=="Star wars" ||req.params.text=="transformers" ){
                 const result =await toysCollection.find({categoryName: req.params.text}).toArray()
                return res.send(result)
             }
         })
+
+
+        // Creating index for search 
+        const indexkeys={toyname:1,subCategory:1}
+        const indexOptions={name:"toynamesubCategory"}
+        const result= await addToysCollection.createIndex(indexkeys,indexOptions);
+        // res.send(result)
+
+
+        // Search by Toys Title Backend Route
+        app.get('/searchtoys/:text', async (req,res)=>{
+            const searchToys=req.params.text
+            const result =await addToysCollection.find({
+                $or:[
+                    {toyname:{$regex:searchToys, $options: "i"}}
+                ]
+            }).toArray()
+            res.send(result)
+        })
+
 
         // Get all Added Data from mongodb
         app.get('/addtoys', async (req, res) => {
