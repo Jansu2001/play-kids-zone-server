@@ -77,7 +77,6 @@ async function run() {
             res.send(result)
         })
 
-
         // Update TOys By Using ID
         app.put('/addtoys/:id', async (req, res) => {
             const id = req.params.id
