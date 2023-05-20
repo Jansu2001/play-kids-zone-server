@@ -38,20 +38,12 @@ async function run() {
 
 
         // Shop By Categories Tabs Backend Routes
-        app.get('/toys/:text', async (req, res) => {
-            if(req.params.text=="Avengers" || req.params.text=="Star wars" ||req.params.text=="transformers" ){
-                const result =await addToysCollection.find({categoryName: req.params.text}).toArray()
-               return res.send(result)
-            }
-        })
-
-
-        // Creating index for search 
-        // const indexkeys={toyname:1,subCategory:1}
-        // const indexOptions={name:"toynamesubCategory"}
-        // const result= await addToysCollection.createIndex(indexkeys,indexOptions);
-        // res.send(result)
-
+        // app.get('/toys/:text', async (req, res) => {
+        //     if(req.params.text=="Avengers" || req.params.text=="Star wars" ||req.params.text=="transformers" ){
+        //         const result =await addToysCollection.find({subCategory: req.params.text}).limit(3).toArray()
+        //        return res.send(result)
+        //     }
+        // })
 
         // Search by Toys name Using Index Backend Route
         app.get('/searchtoys/:text', async (req,res)=>{
@@ -71,7 +63,7 @@ async function run() {
             if (req.query?.email) {
                 query = { email: req.query.email }
             }
-            const result = await addToysCollection.find(query).limit(20).toArray()
+            const result = await addToysCollection.find(query).toArray()
             res.send(result)
         })
 
@@ -107,7 +99,7 @@ async function run() {
                 }
             };
             const result = await addToysCollection.updateOne(filter, updateToys, options)
-            console.log(result);
+            // console.log(result);
             res.send(result)
         })
 
