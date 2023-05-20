@@ -56,7 +56,7 @@ async function run() {
         // res.send(result)
 
 
-        // Search by Toys Title Backend Route
+        // Search by Toys name Using Index Backend Route
         app.get('/searchtoys/:text', async (req,res)=>{
             const searchToys=req.params.text
             const result =await addToysCollection.find({
@@ -68,6 +68,9 @@ async function run() {
         })
 
 
+
+
+
         // Get all Added Data from mongodb
         app.get('/addtoys', async (req, res) => {
             // console.log(req.query.email);
@@ -75,7 +78,7 @@ async function run() {
             if (req.query?.email) {
                 query = { email: req.query.email }
             }
-            const result = await addToysCollection.find(query).toArray()
+            const result = await addToysCollection.find(query).limit(20).toArray()
             res.send(result)
         })
 
