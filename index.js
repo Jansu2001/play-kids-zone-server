@@ -15,12 +15,9 @@ app.get('/', (req, res) => {
 })
 
 
-
-
-
-
 // MONGODB START
-const uri = `mongodb+srv://${process.env.SECRET_USER}:${process.env.SECRET_PASS}@cluster0.ceweuof.mongodb.net/?retryWrites=true&w=majority`;
+var uri = `mongodb://${process.env.SECRET_USER}:${process.env.SECRET_PASS}@ac-hbq0lk7-shard-00-00.ceweuof.mongodb.net:27017,ac-hbq0lk7-shard-00-01.ceweuof.mongodb.net:27017,ac-hbq0lk7-shard-00-02.ceweuof.mongodb.net:27017/?ssl=true&replicaSet=atlas-3rqprv-shard-0&authSource=admin&retryWrites=true&w=majority`;
+// const uri = `mongodb+srv://${process.env.SECRET_USER}:${process.env.SECRET_PASS}@cluster0.ceweuof.mongodb.net/?retryWrites=true&w=majority`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
@@ -34,7 +31,7 @@ const client = new MongoClient(uri, {
 async function run() {
     try {
         // Connect the client to the server	(optional starting in v4.7)
-        await client.connect();
+        // await client.connect();
 
         const toysCollection = client.db('playKidsZone').collection('toys')
         const addToysCollection = client.db('playKidsZone').collection('addToys')
@@ -43,16 +40,16 @@ async function run() {
         // Shop By Categories Tabs Backend Routes
         app.get('/toys/:text', async (req, res) => {
             if(req.params.text=="Avengers" || req.params.text=="Star wars" ||req.params.text=="transformers" ){
-                const result =await toysCollection.find({categoryName: req.params.text}).toArray()
+                const result =await addToysCollection.find({categoryName: req.params.text}).toArray()
                return res.send(result)
             }
         })
 
 
         // Creating index for search 
-        const indexkeys={toyname:1,subCategory:1}
-        const indexOptions={name:"toynamesubCategory"}
-        const result= await addToysCollection.createIndex(indexkeys,indexOptions);
+        // const indexkeys={toyname:1,subCategory:1}
+        // const indexOptions={name:"toynamesubCategory"}
+        // const result= await addToysCollection.createIndex(indexkeys,indexOptions);
         // res.send(result)
 
 
@@ -60,14 +57,10 @@ async function run() {
         app.get('/searchtoys/:text', async (req,res)=>{
             const searchToys=req.params.text
             const result =await addToysCollection.find({
-                $or:[
-                    {toyname:{$regex:searchToys, $options: "i"}}
-                ]
+                toyname:searchToys
             }).toArray()
             res.send(result)
         })
-
-
 
 
 
@@ -129,7 +122,7 @@ async function run() {
 
 
         // Send a ping to confirm a successful connection
-        await client.db("admin").command({ ping: 1 });
+        // await client.db("admin").command({ ping: 1 });
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
     } finally {
         // Ensures that the client will close when you finish/error
