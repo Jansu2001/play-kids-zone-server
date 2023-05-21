@@ -17,7 +17,7 @@ app.get('/', (req, res) => {
 
 // MONGODB START
 var uri = `mongodb://${process.env.SECRET_USER}:${process.env.SECRET_PASS}@ac-hbq0lk7-shard-00-00.ceweuof.mongodb.net:27017,ac-hbq0lk7-shard-00-01.ceweuof.mongodb.net:27017,ac-hbq0lk7-shard-00-02.ceweuof.mongodb.net:27017/?ssl=true&replicaSet=atlas-3rqprv-shard-0&authSource=admin&retryWrites=true&w=majority`;
-// const uri = `mongodb+srv://${process.env.SECRET_USER}:${process.env.SECRET_PASS}@cluster0.ceweuof.mongodb.net/?retryWrites=true&w=majority`;
+
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
@@ -33,17 +33,7 @@ async function run() {
         // Connect the client to the server	(optional starting in v4.7)
         // await client.connect();
 
-        const toysCollection = client.db('playKidsZone').collection('toys')
         const addToysCollection = client.db('playKidsZone').collection('addToys')
-
-
-        // Shop By Categories Tabs Backend Routes
-        // app.get('/toys/:text', async (req, res) => {
-        //     if(req.params.text=="Avengers" || req.params.text=="Star wars" ||req.params.text=="transformers" ){
-        //         const result =await addToysCollection.find({subCategory: req.params.text}).limit(3).toArray()
-        //        return res.send(result)
-        //     }
-        // })
 
         // Search by Toys name Using Index Backend Route
         app.get('/searchtoys/:text', async (req,res)=>{
@@ -58,12 +48,11 @@ async function run() {
 
         // Get all Added Data from mongodb
         app.get('/addtoys', async (req, res) => {
-            // console.log(req.query.email);
             let query = {}
             if (req.query?.email) {
                 query = { email: req.query.email }
             }
-            const result = await addToysCollection.find(query).toArray()
+            const result = await addToysCollection.find(query).sort({price: -1}).limit(20).toArray()
             res.send(result)
         })
 
